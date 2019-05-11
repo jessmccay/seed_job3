@@ -1,0 +1,24 @@
+node {
+    stage("a new pipeline"){
+        jobDsl scriptText: '''pipelineJob('3rd_job'){
+            concurrentBuild(false)
+            triggers {
+                githubPush()
+            }
+            definition {
+                cpsScm {
+                    scm {
+                        git {
+                            branch('master')
+                            remote {
+                                github('jessmccay/service2', 'ssh')
+                                credentials('service2-key')
+                            }
+                        }
+                    }
+                    scriptPath('jenkins/Jenkinsfile')
+                }
+            }
+        }'''
+    }
+}
